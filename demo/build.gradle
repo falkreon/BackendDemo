@@ -1,0 +1,49 @@
+buildscript {
+	repositories {
+		mavenCentral();
+		jcenter();
+		maven {
+			url "https://plugins.gradle.org/m2/";
+		}
+	}
+	
+	dependencies {
+		classpath "com.github.jengelman.gradle.plugins:shadow:2.0.4";
+	}
+}
+ 
+apply plugin: "java";
+apply plugin: "com.github.johnrengelman.shadow";
+
+group = "io.github.backenddemo";
+archivesBaseName = "BackendDemo";
+version = "1.0";
+
+defaultTasks 'clean', 'shadowJar';
+
+repositories {
+	mavenCentral();
+}
+
+configurations {
+	compile.extendsFrom shadow
+	testCompile.extendsFrom compile
+}
+
+dependencies {
+	testCompile "junit:junit:4.12";
+	
+	//testCompile group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2";
+	shadow group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2";
+	
+	//testCompile group: "com.google.guava", name: "guava", version: "23.5-jre";
+	shadow group: "com.google.guava", name: "guava", version: "23.5-jre";
+	
+	shadow project('backend');
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.quickbase.Main'
+	}
+}
