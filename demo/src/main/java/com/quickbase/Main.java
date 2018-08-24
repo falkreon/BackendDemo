@@ -13,19 +13,6 @@ import com.quickbase.cityservice.PopulationService;
 import com.quickbase.cityservice.DBPopulationService;
 import com.quickbase.cityservice.ServiceError;
 
-// Impl note: There's a Main in backend; this one takes precedence
-
-/*
- * The original exercise seemed intended to be completed inside one project, but several pieces of the original project
- * wind up being proprietary and unchangeable in practice, so I decided to split the project and treat "backend" as unchangeable
- * except where changes were explicitly required by the exercise.
- * 
- * The artifact to be run is "BackendDemo-1.0-all.jar", which has backend and all other dependencies shaded. It will still
- * expect the resources folder to be available, but both the unit tests and the program should be resilient against changes in
- * the data or nonbreaking changes to the backend project.
- */
-
-
 
 public class Main {
 	public static void main(String... args) {
@@ -91,6 +78,14 @@ public class Main {
 			result.add("  \""+entry.getKey()+"\": "+entry.getValue()+",");
 		}
 		result.add("}");
+		
+		//Clip off the trailing comma if there is one
+		if (result.size()>2) {
+			int lastEntryPosition = result.size()-2;
+			String lastEntry = result.get(lastEntryPosition);
+			lastEntry = lastEntry.substring(0, lastEntry.length()-1);
+			result.set(lastEntryPosition, lastEntry);
+		}
 		
 		return result;
 	}
