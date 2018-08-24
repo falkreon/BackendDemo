@@ -9,10 +9,11 @@
 *.log
 hs_err_pid*
 
-#Eclipse
+# Eclipse
 .classpath
 .project
 .settings
+.reccommenders
 
 # Linux
 *.directory

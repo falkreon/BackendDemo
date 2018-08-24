@@ -27,7 +27,7 @@ repositories {
 
 configurations {
 	compile.extendsFrom shadow
-	testCompile.extendsFrom compile
+	//testCompile.extendsFrom compile
 }
 
 dependencies {
