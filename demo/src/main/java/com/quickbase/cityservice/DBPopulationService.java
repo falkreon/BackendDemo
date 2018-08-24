@@ -1,8 +1,6 @@
 package com.quickbase.cityservice;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -12,8 +10,10 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.quickbase.devint.DBManager;
 import com.quickbase.devint.DBManagerImpl;
 
-public class DBCityService implements CityService {
-	
+/**
+ * PopulationService which gathers data from DBManager in the backend
+ */
+public class DBPopulationService implements PopulationService {
 	@Override
 	public List<Pair<String, Integer>> getAllSync() throws ServiceError {
 		return getInternal();

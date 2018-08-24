@@ -8,7 +8,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.quickbase.devint.ConcreteStatService;
 
-public class APICityService implements CityService {
+public class APIPopulationService implements PopulationService {
 
 	@Override
 	public ListenableFuture<List<Pair<String, Integer>>> getAllAsync() {

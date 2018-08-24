@@ -8,17 +8,29 @@ import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.quickbase.cityservice.APICityService;
-import com.quickbase.cityservice.CityService;
-import com.quickbase.cityservice.DBCityService;
+import com.quickbase.cityservice.APIPopulationService;
+import com.quickbase.cityservice.PopulationService;
+import com.quickbase.cityservice.DBPopulationService;
 import com.quickbase.cityservice.ServiceError;
 
 // Impl note: There's a Main in backend; this one takes precedence
 
+/*
+ * The original exercise seemed intended to be completed inside one project, but several pieces of the original project
+ * wind up being proprietary and unchangeable in practice, so I decided to split the project and treat "backend" as unchangeable
+ * except where changes were explicitly required by the exercise.
+ * 
+ * The artifact to be run is "BackendDemo-1.0-all.jar", which has backend and all other dependencies shaded. It will still
+ * expect the resources folder to be available, but both the unit tests and the program should be resilient against changes in
+ * the data or nonbreaking changes to the backend project.
+ */
+
+
+
 public class Main {
 	public static void main(String... args) {
 		try {
-			HashMap<String, Integer> populations = combineData(new DBCityService(), new APICityService());
+			HashMap<String, Integer> populations = combineData(new DBPopulationService(), new APIPopulationService());
 			List<String> flat = flattenToJson(populations);
 			for(String s : flat) {
 				System.out.println(s);
@@ -46,22 +58,27 @@ public class Main {
 		case "aruba (netherlands)":
 			return "netherlands";
 			
-			
 		default:
 			return clean;
 		}
 	}
 	
-	
-	
-	public static HashMap<String, Integer> combineData(CityService... services) throws ServiceError {
+	public static HashMap<String, Integer> combineData(PopulationService... services) throws ServiceError {
 		HashMap<String, Integer> result = new HashMap<>();
 		for(int i=services.length-1; i>=0; i--) {
-			CityService service = services[i];
+			PopulationService service = services[i];
+			
+			HashMap<String, Integer> thisServiceData = new HashMap<>();
 			
 			for(Pair<String, Integer> pair : service.getAllSync()) {
-				result.put(canonicalize(pair.getKey()), pair.getValue());
+				
+				Integer existing = thisServiceData.get(canonicalize(pair.getKey()));
+				if (existing==null) existing = 0;
+				
+				thisServiceData.put(canonicalize(pair.getKey()), existing + pair.getValue());
 			}
+			
+			result.putAll(thisServiceData);
 		}
 		
 		return result;
